@@ -1,6 +1,6 @@
 // latihan 1
 
-const liMhs = document.querySelectorAll('li');
+// const liMhs = document.querySelectorAll('li');
 
 
 // const mhs = [];
@@ -14,6 +14,14 @@ const liMhs = document.querySelectorAll('li');
 
 // menggunakan fungsi map
 
-const mhs = [...liMhs].map( m => m.textContent );
-console.log(mhs)
+// const mhs = [...liMhs].map( m => m.textContent );
+// console.log(mhs)
 
+
+
+// latihan 2
+
+const nama = document.querySelector('.nama');
+const huruf = [...nama.textContent].map(h => `<span>${h}</span>`).join('');
+
+nama.innerHTML = huruf;
