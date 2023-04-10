@@ -1,36 +1,41 @@
 // http://www.omdbapi.com/?apikey=9e96ad3b&s=harry potter
 
-$.ajax({
-    url: 'http://www.omdbapi.com/?apikey=9e96ad3b&s=avengers',
-    success: results => {
-        const movies = results.Search;
-        console.log(movies)
-        let cards ='';
-        movies.forEach (m => {
-            cards += showCard(m);
-        });
-        
-        $('.movie-container').html(cards);
+$('.search-button').on('click', function() {
 
-        // ketika tombol detail di-klik
-        $('.modal-detail-button').on('click', function () {
-            $.ajax({
-                url: 'http://www.omdbapi.com/?apikey=9e96ad3b&i=' + $(this).data('imdbid'),
-                success : m => {
-                    const movieDetail = moviesDetails(m);
-                  $('.modal-body').html(movieDetail)
-                },
-                error: (e) => {
-                    console.log(e.responseText);
-                }
-            })
-        });
-
-    },
-    error: (e) => {
-        console.log(e.responseText);
-    }
+    $.ajax({
+        url: 'http://www.omdbapi.com/?apikey=9e96ad3b&s=' +$('.input-keyword').val() ,
+        success: results => {
+            const movies = results.Search;
+            console.log(movies)
+            let cards ='';
+            movies.forEach (m => {
+                cards += showCard(m);
+            });
+            
+            $('.movie-container').html(cards);
+    
+            // ketika tombol detail di-klik
+            $('.modal-detail-button').on('click', function () {
+                $.ajax({
+                    url: 'http://www.omdbapi.com/?apikey=9e96ad3b&i=' + $(this).data('imdbid'),
+                    success : m => {
+                        const movieDetail = moviesDetails(m);
+                      $('.modal-body').html(movieDetail)
+                    },
+                    error: (e) => {
+                        console.log(e.responseText);
+                    }
+                })
+            });
+    
+        },
+        error: (e) => {
+            console.log(e.responseText);
+        }
+    });
+    
 });
+
 
 function showCard(m) {
     return ` <div class="col-md-4 my-5">
@@ -54,10 +59,10 @@ function moviesDetails(m) {
         <div class="col-md">
             <ul class="list-group">
                 <li class="list-group-item"><h4>${m.Title}</h4></li>
-                <li class="list-group-item"><strong>Director : </strong></li>
-                <li class="list-group-item"><strong>Actors :</strong></li>
-                <li class="list-group-item"><strong>Writer : </strong></li>
-                <li class="list-group-item"><strong>Plot : </strong><br></li>
+                <li class="list-group-item"><strong>Director : </strong>${m.Director}</li>
+                <li class="list-group-item"><strong>Actors : </strong>${m.Actors}</li>
+                <li class="list-group-item"><strong>Writer : </strong>${m.Writer}</li>
+                <li class="list-group-item"><strong>Plot : </strong><br>${m.Plot}</li>
               </ul>
         </div>
     </div>
