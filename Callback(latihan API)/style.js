@@ -17,22 +17,7 @@ $.ajax({
             $.ajax({
                 url: 'http://www.omdbapi.com/?apikey=9e96ad3b&i=' + $(this).data('imdbid'),
                 success : m => {
-                    const movieDetail = ` <div class="container-fliud">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img src="${m.Poster}" class="img-fluid" alt="">
-                        </div>
-                        <div class="col-md">
-                            <ul class="list-group">
-                                <li class="list-group-item"><h4>${m.Title}</h4></li>
-                                <li class="list-group-item"><strong>Director : </strong></li>
-                                <li class="list-group-item"><strong>Actors :</strong></li>
-                                <li class="list-group-item"><strong>Writer : </strong></li>
-                                <li class="list-group-item"><strong>Plot : </strong><br></li>
-                              </ul>
-                        </div>
-                    </div>
-                  </div>`;
+                    const movieDetail = moviesDetails(m);
                   $('.modal-body').html(movieDetail)
                 },
                 error: (e) => {
@@ -58,4 +43,23 @@ function showCard(m) {
         </div>
       </div>
 </div>`;
+}
+
+function moviesDetails(m) {
+    return ` <div class="container-fliud">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="${m.Poster}" class="img-fluid" alt="">
+        </div>
+        <div class="col-md">
+            <ul class="list-group">
+                <li class="list-group-item"><h4>${m.Title}</h4></li>
+                <li class="list-group-item"><strong>Director : </strong></li>
+                <li class="list-group-item"><strong>Actors :</strong></li>
+                <li class="list-group-item"><strong>Writer : </strong></li>
+                <li class="list-group-item"><strong>Plot : </strong><br></li>
+              </ul>
+        </div>
+    </div>
+  </div>`;
 }
