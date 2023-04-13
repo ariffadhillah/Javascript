@@ -1,36 +1,78 @@
 // fetch 
 
-const SearchButton = document.querySelector('.search-button');
-SearchButton.addEventListener('click', function() {
-    const inputKeyword = document.querySelector('.input-keyword');
+// const SearchButton = document.querySelector('.search-button');
+// SearchButton.addEventListener('click', function() {
+//     const inputKeyword = document.querySelector('.input-keyword');
     
-    fetch('http://www.omdbapi.com/?apikey=9e96ad3b&s=' + inputKeyword.value)
-    .then(response => response.json())
-    .then(response => {
-        const movies = response.Search;
-        let cards = '';
-        movies.forEach(m => cards += showCard(m));
-        const moviesContainer = document.querySelector('.movie-container');
-        moviesContainer.innerHTML = cards;
+//     fetch('http://www.omdbapi.com/?apikey=9e96ad3b&s=' + inputKeyword.value)
+//     .then(response => response.json())
+//     .then(response => {
+//         const movies = response.Search;
+//         let cards = '';
+//         movies.forEach(m => cards += showCard(m));
+//         const moviesContainer = document.querySelector('.movie-container');
+//         moviesContainer.innerHTML = cards;
 
-        // ketika tombol detail di-klik
-        const modalDetailButton = document.querySelectorAll('.modal-detail-button');
-        modalDetailButton.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const imdbid = this.dataset.imdbid;
-                fetch('http://www.omdbapi.com/?apikey=9e96ad3b&i='+ imdbid)
-                .then(response => response.json())
-                .then(m => {
-                    const movieDetail = showMoviesDetails(m);
-                    const modalBody = document.querySelector('.modal-body');
-                    modalBody.innerHTML = movieDetail;
-                    
-                });
-            });
-        });
-    });
+//         // ketika tombol detail di-klik
+//         const modalDetailButton = document.querySelectorAll('.modal-detail-button');
+//         modalDetailButton.forEach(btn => {
+//             btn.addEventListener('click', function() {
+//                 const imdbid = this.dataset.imdbid;
+//                 fetch('http://www.omdbapi.com/?apikey=9e96ad3b&i='+ imdbid)
+//                 .then(response => response.json())
+//                 .then(m => {
+//                     const movieDetail = showMoviesDetails(m);
+//                     const modalBody = document.querySelector('.modal-body');
+//                     modalBody.innerHTML = movieDetail;                    
+//                 });
+//             });
+//         });
+//     });
 
+// });
+
+
+const searchButton = document.querySelector('.search-button');
+searchButton.addEventListener('click', async function () {
+    const inputKeyword = document.querySelector('.input-keyword');
+    const movies = await getMovies(inputKeyword.value);
+    updateUI(movies);
 });
+
+// event binding
+
+document.addEventListener('click', async function(e) {
+    if(e.target.classList.contains('modal-detail-button')) {
+        const imdbid = e.target.dataset.imdbid;
+        const movieDetail = await getMoviesDetail(imdbid);
+        updateUIDetail(movieDetail);
+    }
+});
+
+function getMoviesDetail(imdbid) {
+    return fetch('http://www.omdbapi.com/?apikey=9e96ad3b&i='+ imdbid)
+    .then(response => response.json())
+    .then(m => m);
+}
+
+function updateUIDetail(m) {
+    const movieDetail = showMoviesDetails(m);
+    const modalBody = document.querySelector('.modal-body');
+    modalBody.innerHTML = movieDetail;
+}
+
+function getMovies(keyword) {
+    return fetch('http://www.omdbapi.com/?apikey=9e96ad3b&s=' + keyword)
+    .then(response => response.json())
+    .then(response => response.Search);
+}
+
+function updateUI(movies) {
+    let cards = '';
+    movies.forEach(m => cards += showCard(m));
+    const moviesContainer = document.querySelector('.movie-container');
+    moviesContainer.innerHTML = cards;
+}
 
 
 
@@ -46,6 +88,8 @@ function showCard(m) {
       </div>
 </div>`;
 }
+
+
 
 function showMoviesDetails(m) {
     return ` <div class="container-fliud">
